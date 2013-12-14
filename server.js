@@ -1,38 +1,62 @@
+// server.js
 
-/**
- * Module dependencies.
- */
+// Set up =====================================================================
+var express  = require('express');
+var app      = express();
+var http     = require('http');
+var path     = require('path');
 
-var express = require('express');
-var routes = require('./routes');
-var user = require('./routes/user');
-var http = require('http');
-var path = require('path');
+var mongoose = require('mongoose');
+var passport = require('passport');
+var flash    = require('connect-flash');
 
-var app = express();
 
-// all environments
-app.set('port', process.env.PORT || 3000);
-app.set('views', path.join(__dirname, 'views'));
-app.set('view engine', 'ejs');
-app.use(express.favicon());
-app.use(express.logger('dev'));
-app.use(express.json());
-app.use(express.urlencoded());
-app.use(express.methodOverride());
-app.use(express.cookieParser('your secret here'));
-app.use(express.session());
-app.use(app.router);
-app.use(express.static(path.join(__dirname, 'public')));
+// Config =====================================================================
+var dbConfig = require('./config/database.js');
+mongoose.connect(dbConfig.url); // connect to the database
 
-// development only
-if ('development' == app.get('env')) {
-  app.use(express.errorHandler());
-}
+// require('./config/passport')(passport); // pass pasport for configuration
 
-app.get('/', routes.index);
-app.get('/users', user.list);
+app.set('title', 'Passport example application');
 
-http.createServer(app).listen(app.get('port'), function(){
-  console.log('Express server listening on port ' + app.get('port'));
+app.configure(function () {
+
+    app.set('port', process.env.PORT || 3000);
+
+    // set up our express application
+    app.use(express.logger('dev'));
+    app.use(express.cookieParser('cookie secret here'));
+    app.use(express.favicon());
+
+    app.use(express.json());            // replaces bodyParser()
+    app.use(express.urlencoded());      // replaces bodyParser()
+    app.use(express.methodOverride());
+
+    app.use(express.static(path.join(__dirname, 'public')));
+
+    app.set('view engine', 'ejs');
+    app.set('views', path.join(__dirname, 'views'));
+
+    // required for passport
+    app.use(express.session({ secret: 'twasbrilligandtheslithythovesdid'}));
+    app.use(passport.initialize());
+    app.use(passport.session());        // persistent login sessions
+    app.use(flash());                   // for flash messages stored in session
+
+    // development only
+    if ('development' == app.get('env')) {
+        app.use(express.errorHandler());
+    }
+});
+
+
+// Routes =====================================================================
+// pass the app and passport to our routing function, once they're both
+// fully configurede
+require('./app/routes.js')(app, passport);
+
+
+// and ... GO! ================================================================
+http.createServer(app).listen(app.get('port'), function () {
+    console.log('Express server listening on port ' + app.get('port'));
 });
