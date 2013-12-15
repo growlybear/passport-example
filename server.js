@@ -15,7 +15,7 @@ var flash    = require('connect-flash');
 var dbConfig = require('./config/database.js');
 mongoose.connect(dbConfig.url); // connect to the database
 
-// require('./config/passport')(passport); // pass pasport for configuration
+require('./config/passport')(passport); // pass pasport for configuration
 
 app.set('title', 'Passport example application');
 

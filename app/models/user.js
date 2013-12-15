@@ -53,4 +53,4 @@ userSchema.methods.hashPassword = function (password) {
 }
 
 // create the model for users and expose it to out app
-module.exports = mongoose('User', userSchema);
+module.exports = mongoose.model('User', userSchema);
