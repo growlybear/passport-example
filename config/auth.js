@@ -1,10 +1,12 @@
 // config/auth.js
 
 module.exports = {
-    
+
+    // TODO in a real application, these would be managed as ENV variables
+    //      and kept outside of version control
     facebookAuth: {
-        clientID    : 'my-secret-clientID-here',    // app id
-        clientSecret: 'my-client-secret-here',      // app secret
+        clientID    : '248804871953675',                    // app id
+        clientSecret: '1015c32e6c5c25d56c21e54f2a8cf1cc',   // app secret
         callbackURL : 'http://localhost:3000/auth/facebook/callback'
     },
     
