@@ -10,18 +10,19 @@ function isLoggedIn(req, res, next) {
 
 module.exports = function (app, passport) {
 
-    // home page
+    // Home page
     app.get('/', function (req, res) {
         res.render('index.ejs');
     });
 
-    // login form
+
+    // Login form
     app.get('/login', function (req, res) {
         res.render('login.ejs', { message: req.flash('loginMessage') });
     });
     // app.post('/login', 'do all our passport stuff here');
 
-    // signup form
+    // Signup form
     app.get('/signup', function (req, res) {
         res.render('signup.ejs', { message: req.flash('signupMessage') });
     });
@@ -31,16 +32,18 @@ module.exports = function (app, passport) {
         failureFlash: true
     }));
 
-    // profile page
+
+    // Profile page
     app.get('/profile', isLoggedIn, function (req, res) {
         res.render('profile.ejs', {
             user: req.user  // get the user out of session and pass to template
         });
     });
 
-    // logout page
+
+    // Logout page
     app.get('/logout', function (req, res) {
-        req.logout();
+        req.logout();       // default logout method provided by passport
         res.redirect('/');
     });
 };
