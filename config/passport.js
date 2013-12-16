@@ -2,6 +2,7 @@
 
 var LocalStrategy = require('passport-local').Strategy;
 var FacebookStrategy = require('passport-facebook').Strategy;
+var TwitterStrategy  = require('passport-twitter').Strategy;
 
 // load up the user model
 var User = require('../app/models/user');
@@ -168,4 +169,55 @@ module.exports = function (passport) {
         });
 
     }));
+
+
+    // ========================================================================
+    // TWITTER LOGIN
+    // ========================================================================
+    // no need for named strategies here
+
+    passport.use(new TwitterStrategy({
+
+        // pull in credentials from auth.js file
+        consumerKey   : authConfig.twitterAuth.consumerKey,
+        consumerSecret: authConfig.twitterAuth.consumerSecret,
+        callbackURL   : authConfig.twitterAuth.callbackURL
+
+    }, function (token, tokenSecret, profile, done) {
+
+        // asynchronous
+        // ie. User.findOne won't fire until we have data back from Twitter
+        process.nextTick(function () {
+
+            User.findOne({ 'twitter.id': profile.id }, function (err, user) {
+
+                if (err) return done(err);
+
+                // if the user is found, log them in
+                if (user) {
+                    return done(null, user);    // user found, all good
+                }
+                // otherwise, create a new user and log them in
+                else {
+                    var newUser = new User();
+
+                    // set all of the twitter information in our user model
+                    newUser.twitter.id = profile.id;
+                    newUser.twitter.token = token;
+                    newUser.twitter.username = profile.username;
+                    newUser.twitter.displayName = profile.displayName;
+
+                    // save our new user to the database
+                    newUser.save(function (err) {
+                        if (err) throw err;     // FIXME? better error handling
+
+                        // if successful, return the new user
+                        return done(null, newUser);
+                    });
+                }
+            });
+        });
+
+    }));
+
 };
