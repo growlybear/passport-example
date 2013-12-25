@@ -1,4 +1,4 @@
 passport-example
 ================
 
-Brilliant tutorial by Chris Sevilleja for authentication with passport.js in node
+[Brilliant tutorial](http://scotch.io/tutorials/javascript/easy-node-authentication-google) by Chris Sevilleja for authentication in Node using [passport.js](http://passportjs.org/)
