@@ -66,6 +66,17 @@ module.exports = function (app, passport) {
     }));
 
 
+    // Google routes
+    app.get('/auth/google', passport.authenticate('google', { scope: ['profile', 'email'] }));
+
+    // handle the callback after google has authenticated the user
+    app.get('/auth/google/callback', passport.authenticate('google', {
+        successRedirect: '/profile',
+        failureRedirect: '/'
+    }));
+
+
+
     // Logout page
     app.get('/logout', function (req, res) {
         req.logout();       // default logout method provided by passport

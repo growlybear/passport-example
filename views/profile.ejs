@@ -60,7 +60,7 @@
     </div>
 
     <div class="row">
-      <!-- Ttwitter information -->
+      <!-- Twitter information -->
       <div class="col-sm-6">
         <div class="well">
           <h3 class="text-info"><span class="fa fa-twitter"></span> Twitter</h3>
@@ -70,6 +70,21 @@
               <strong>token</strong>: <%= user.twitter.token %><br>
               <strong>username</strong>: <%= user.twitter.username %><br>
               <strong>displayName</strong>: <%= user.twitter.displayName %>
+            </p>
+
+        </div>
+      </div>
+
+      <!-- Google+ information -->
+      <div class="col-sm-6">
+        <div class="well">
+          <h3 class="text-info"><span class="fa fa-google-plus"></span> Twitter</h3>
+
+            <p>
+              <strong>id</strong>: <%= user.google.id %><br>
+              <strong>token</strong>: <%= user.google.token %><br>
+              <strong>username</strong>: <%= user.google.email %><br>
+              <strong>displayName</strong>: <%= user.google.name %>
             </p>
 
         </div>
